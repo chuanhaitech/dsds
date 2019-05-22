@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>数据源详细信息</title>
+   	<link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+	<link rel="stylesheet" th:href="@{/css/project.css}">
+</head>
+<body>
+<form class="layui-form">
+	<div class="layui-form-item">
+	    <div class="layui-inline">
+	      <label class="layui-form-label">航次名称: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="expeditions" th:value="${source.expeditions}" readonly="readonly"  autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">作业类型: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="jobType" th:value="${source.jobType}" readonly="readonly"  autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">是否为潜器作业: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="isSubmerJob" th:value="${source.isSubmerJob=='0'?'是':'否'}" readonly="readonly"  autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">潜器名称: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="submerName" th:value="${source.submerName}" readonly="readonly" autocomplete="off" lay-verify="required" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">数据类型: </label>
+	      <div class="layui-input-inline">
+	       	<input type="text" name="dataType" th:value="${source.dataType}" readonly="readonly"  autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">设备类型: </label>
+	      <div class="layui-input-inline">
+	       <input type="text" name="deviceType" th:value="${source.deviceType}" readonly="readonly"  autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">设备序列号: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="deviceSeriNo" th:value="${source.deviceSeriNo}" readonly="readonly"  lay-verify="required" autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">平台类型: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="platformType" th:value="${source.platformType}" readonly="readonly"  autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">平台名称: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="submersiblePlat" th:value="${source.submersiblePlat}" readonly="readonly"  lay-verify="required" autocomplete="off"  class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">科考船舶: </label>
+	      <div class="layui-input-inline">
+	       <input type="text" name="shipOrPlatformName" th:value="${source.shipOrPlatformName}" readonly="readonly"  autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">数据格式: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="fileFormat" th:value="${source.fileFormat}" readonly="readonly" lay-verify="required" autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">处理状态: </label>
+	      <div class="layui-input-inline">
+	      	<input type="text" name="rawProcessedStatus" th:value="${source.rawProcessedStatus}" readonly="readonly"  autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">开始时间: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="startTime" th:value="${source.startTime}" readonly="readonly" lay-verify="required" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd HH:mm:ss">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">结束时间: </label>
+	      <div class="layui-input-inline">
+	        <input type="text"  name="endTime" th:value="${source.endTime}" readonly="readonly" autocomplete="off" lay-verify="required" class="layui-input" placeholder="yyyy-MM-dd HH:mm:ss">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">资助项目: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="fundingAgency" th:value="${source.fundingAgency}" readonly="readonly" autocomplete="off" lay-verify="required" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">论文引用: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="referenceCitation" th:value="${source.referenceCitation}" readonly="readonly" autocomplete="off" lay-verify="required" class="layui-input" th:alt-title="${source.referenceCitation}">
+	      </div>
+	    </div>
+  	</div>
+</form>
+
+<script th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript">
+	
+</script>
+</body>
+</html>

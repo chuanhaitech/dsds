@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+<title>模板解析</title>
+<link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
+	<link rel="stylesheet" th:href="@{/css/iconfont.css}">
+<link rel="stylesheet" th:href="@{/css/project.css}">
+</head>
+<body>
+	<!-- 头部 -->
+	<!-- <div th:replace="header"></div> -->
+	<div class="home_header">
+        <div class="text_box">
+        	<a class="headline fl" href="/index">
+            <p>深海科考数据管理平台</p>
+            <p>Deep-sea Data System</p>
+        	</a>
+        	<div class="logo fl">
+            <a class="logo_href" href="/index"><img alt="" th:src="@{/images/sy-logo.png}"></a>	
+        	</div>
+        </div>
+        <ul sec:authorize="isAuthenticated()" class="userLogon">
+        	<li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-yonghu" style="color: #1890ff"></i>
+        			<p class="infoTxt" sec:authentication="name"></p>
+        		</a>
+        	</li>
+        	<!-- <li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-xiaoxi" style="color: #FF5722"></i>
+        			<p class="infoTxt">
+        				<span>消息</span>
+        				<span class="comNum infoNum" style="background:#FF5722">2</span>
+        			</p>
+        		</a>
+        	</li>
+        	<li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-renwu" style="color: #009688"></i>
+        			<p class="infoTxt">
+	        			<span>任务</span>
+	        			<span class="comNum taskNum" style="background:#009688">3</span>
+        			</p>
+        		</a>
+        	</li> -->
+        	<li class="infoLi" style="width: 60px;">
+        		<a href="javascript:;">
+        			<form th:action="@{/logout}" method="post">
+        				<i class="iconfont icon-zhuxiao" style="color: #FF0303"></i>
+								<input class="infoTxt logout" type="submit" value="注销" />
+							</form>
+        		</a>
+        	</li>
+        </ul>
+    </div>
+
+    <!-- 导航栏 -->
+    <ul class="layui-nav" lay-filter="">
+        <li class="layui-nav-item"><a th:href="@{/index}">首页</a></li>
+        <li class="layui-nav-item layui-this">
+          <a href="javascript:;">数据上传</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd class="layui-this"><a th:href="@{/templateParse}">模板解析</a></dd>
+            <dd><a th:href="@{/dataUpload}">上传数据(批量)</a></dd>
+            <dd><a th:href="@{/dataUploadList}">上传数据(表单)</a></dd>
+            <!-- <dd><a th:href="@{/query/queryMainTableData?id=24&dataType=FluidFlow}">查看主表数据</a></dd> -->
+          </dl>
+        </li>
+        <!-- <li class="layui-nav-item"><a href="search">数据检索</a></li> -->
+        <li class="layui-nav-item"><a th:href="@{/replaceSearch}">数据检索</a></li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">统计分析</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a th:href="@{/shipStatistic}">科考航次</a></dd>
+            <dd><a th:href="@{/platStatistic}">科考船舶</a></dd>
+            <dd><a th:href="@{/submersibleStatistic}">潜器平台</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">科考作业</a>
+            <dl class="layui-nav-child">
+                <!-- 二级菜单 -->
+                <dd><a  th:href="@{/job/shipList}">航次管理</a></dd>
+                <dd><a th:href="@{/job/messageList}">消息管理</a></dd>
+                <dd><a th:href="@{/job/postList}">岗位管理</a></dd>
+                <dd class="jobMenu">
+                	<a href="#" class="job">站位作业<i class="iconfont icon-right"></i></a>
+                	<dl class="layui-nav-child jobList-child">
+                		<dd class="menuTree">
+                			<a th:href="@{/job/ctdList}">取水</a>
+                			<!-- <dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">CTD</a></dd>
+		                		<dd><a href="javascript:;">泵</a></dd>
+		                	</dl> -->
+                		</dd>
+                		<dd class="menuTree">
+                			<a th:href="@{/job/precipitateList}">取沉积物</a>
+                			<!-- <dl class="layui-nav-child listTree">
+		                		<dd><a th:href="@{/job/precipitateList?type=columnar}">柱状</a></dd>
+		                		<dd><a th:href="@{/job/precipitateList?type=trunk}">箱式</a></dd>
+		                		<dd><a th:href="@{/job/precipitateList?type=multitube}">多管</a></dd>
+		                	</dl> -->
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">取岩石<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">钻机</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">精细取样<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">KOV</a></dd>
+		                		<dd><a href="javascript:;">USBL/SBL/LBL</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">探测类<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">热流</a></dd>
+		                	</dl>
+                		</dd>
+                	</dl>
+                </dd>
+                <dd class="jobMenu">
+                	<a href="#" class="job">走航作业<i class="iconfont icon-right"></i></a>
+                	<dl class="layui-nav-child jobList-child">
+                		<dd class="menuTree">
+                			<a href="javascript:;">地球物理<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">MB</a></dd>
+		                		<dd><a th:href="@{/job/subbottomList}">SB</a></dd>
+		                		<dd><a href="javascript:;">GR</a></dd>
+		                		<dd><a href="javascript:;">MAG</a></dd>
+		                		<dd><a href="javascript:;">SS</a></dd>
+		                		<dd><a th:href="@{/job/seismicList}">SEIS</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">物理海洋<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">SBE21</a></dd>
+		                		<dd><a href="javascript:;">ADCP</a></dd>
+		                		<dd><a href="javascript:;">海气通量</a></dd>
+		                		<dd><a href="javascript:;">气象站</a></dd>
+		                	</dl>
+                		</dd>
+                	</dl>
+                </dd>
+                <dd><a th:href="@{/job/myTaskList}">我的任务</a></dd>
+                <dd><a th:href="@{/job/deviceList}">设备管理</a></dd>
+                <dd><a th:href="@{/job/meetingList}">会议管理</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">字典管理</a>
+            <dl class="layui-nav-child">
+               <!-- 二级菜单 -->
+               <dd><a th:href="@{/dataTypeList}">数据类型</a></dd>
+               <dd><a th:href="@{/deviceTypeList}">设备类型</a></dd>
+               <dd><a th:href="@{/platTypeList}">平台类型</a></dd>
+               <dd><a th:href="@{/shipPlatList}">科考船舶</a></dd>
+               <dd><a th:href="@{/submersiblePlatList}">潜器平台</a></dd>
+               <dd><a th:href="@{/suberMessageList}">潜器潜次</a></dd>
+            </dl>
+        </li>
+    </ul>
+
+	<!-- 模板解析 -->
+	<div class="parse_main">
+		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+			<ul class="layui-tab-title">
+				<li class="layui-this">批量模板</li>
+				<li>表单模板</li>
+			</ul>
+			<div class="layui-tab-content" id="tabCont">
+				<div class="layui-tab-item layui-show">
+					<div class="layui-form-item">
+						<div>
+							<button type="button" class="layui-btn layui-btn-normal"
+								id="chooseFileBatch">选择文件</button>
+						</div>
+						<div class="parse_load">
+							<span>批量通用模板下载 ： <a class="template_load"
+								href="excel/generic_template.xlsx">批量通用模板</a></span> <span class="load">批量样例模板下载 ：
+								<a class="template_load" href="excel/example_template.xlsx">批量样例模板</a>
+							</span>
+						</div>
+						<div class="resolve">
+							<button type="button" class="layui-btn" id="batchParse">批量模板解析</button>
+							<span class="resolve_tips">温馨提示 ：该功能主要是将定制的模板文件进行解析,动态生成数据库表</span>
+						</div>
+					</div>
+				</div>
+				<div class="layui-tab-item">
+					<div class="layui-form-item">
+						<div>
+							<button type="button" class="layui-btn layui-btn-normal"
+								id="chooseFileSingle">选择文件</button>
+						</div>
+						<div class="parse_load">
+							<span>表单通用模板下载 ： <a class="template_load"
+								href="excel/generic_template_single.xlsx">表单通用模板</a></span> <span class="load">表单样例模板下载 ：
+								<a class="template_load" href="excel/example_template_single.xlsx">表单样例模板</a>
+							</span>
+						</div>
+						<div class="resolve">
+							<button type="button" class="layui-btn" id="singleParse">表单模板解析</button>
+							<span class="resolve_tips">温馨提示 ：该功能主要是将定制的模板文件进行解析,动态生成数据库表</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 底部 -->
+	<div class="footer cl">
+		<p>
+			版权所有©2018～ <span id="timeYear"></span> 中国科学院深海科学与工程研究所
+		</p>
+		<p>技术支持:船海科技有限公司</p>
+	</div>
+</body>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+	//注意：导航 依赖 element 模块，否则无法进行功能性操作
+	layui.use([ 'element', 'upload', 'form', 'layer' ], function() {
+		var element = layui.element;
+		var $ = layui.jquery;
+		var upload = layui.upload;
+		var form = layui.form;
+		var layer = layui.layer;
+
+		var mydate = new Date();
+		var tm = mydate.getFullYear();
+		$("#timeYear").text(tm);
+
+		//批量模板解析
+		upload.render({
+			elem : '#chooseFileBatch',
+			url : 'file/resolveTemplate', // 服务端上传接口
+			accept : 'file',
+			exts : 'xlsx|xls',
+			auto : false,
+			bindAction : '#batchParse',
+			before : function(obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+				layer.load(); //上传loading
+			},
+			done : function(res, index, upload) {
+				layer.alert("模板文件:" + res.file + "解析成功!");
+				layer.closeAll('loading'); //关闭loading
+				var txt = $(".layui-upload-choose");
+				console.log(txt);
+			},
+			error : function(index, upload) {
+				layer.alert("模板解析失败,请联系管理员!");
+				layer.closeAll('loading'); //关闭loading
+			}
+		});
+		
+		//表单模板解析
+		upload.render({
+			elem : '#chooseFileSingle',
+			url : 'singleFile/parseSingleTemplate', // 服务端上传接口
+			accept : 'file',
+			exts : 'xlsx|xls',
+			auto : false,
+			bindAction : '#singleParse',
+			before : function(obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+				layer.load(); //上传loading
+			},
+			done : function(res, index, upload) {
+				layer.alert("模板文件:" + res.file + "解析成功!");
+				layer.closeAll('loading'); //关闭loading
+				var txt = $(".layui-upload-choose");
+				console.log(txt);
+			},
+			error : function(index, upload) {
+				layer.alert("模板解析失败,请联系管理员!");
+				layer.closeAll('loading'); //关闭loading
+			}
+		});
+
+	});
+</script>
+</html>

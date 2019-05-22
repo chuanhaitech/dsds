@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>用户登录</title>
+<link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<link rel="stylesheet" th:href="@{/css/project.css}">
+<style type="text/css">
+html,body{height:100%;}
+</style>
+</head>
+<body>
+	<div class="logonPage">
+		<div class="logonMain cl">
+			<ul class="mainLeft fl">
+				<li>让</li>
+				<li>
+					<div style="margin-left:20px;">数</div>
+				</li>
+				<li>
+					<div style="margin-left:40px;">据</div>
+				</li>
+				<li>
+					<div style="margin-left:60px;">改</div>
+				</li>
+				<li>
+					<div style="margin-left:80px;">变</div>
+				</li>
+				<li>
+					<div style="margin-left:100px;">生</div>
+				</li>
+				<li>
+					<div style="margin-left:120px;">活</div>
+				</li>
+			</ul>
+			<div class="mainBg">
+				<img alt="" th:src="@{/images/page1_3.jpg}">
+				<h3 class="logonTitle">深海科考数据管理平台</h3>
+				<p class="titleTip">数据管理、统计分析、科考作业</p>
+			</div>
+			<div class="mainRight">
+				<form th:action="@{/userlogin}" class="layui-form" action="" id="logon" method="post">
+					<div class="welcome">
+						<h2>登录</h2>
+						<p>欢迎登录 数据管理</p>
+					</div>
+					<div class="layui-form-item">
+				    <label class="layui-form-label">用户名: </label>
+				    <div class="layui-input-inline">
+				      <input type="text" name="user" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+				    </div>
+				  </div>
+				  <div class="layui-form-item">
+				    <label class="layui-form-label">密码: </label>
+				    <div class="layui-input-inline">
+				    	<input type="password" name="pwd" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+				    </div>
+				  </div>
+				  <div class="remeber">
+				  	<input type="checkbox" name="remember" lay-skin="primary" title="记住我">
+				  </div>
+				  <div class="layui-form-item">
+				    <div class="layui-input-block" id="logonBtn">
+				      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				      <button class="layui-btn" lay-submit="" lay-filter="demo1">登录</button>
+				    </div>
+				  </div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+<script th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript">
+	layui.use('form', function() {
+		var form = layui.form;
+	})
+</script>
+</html>

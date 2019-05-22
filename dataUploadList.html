@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>数据源列表</title>
+	<link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+		<link rel="stylesheet" th:href="@{/css/iconfont.css}">
+	<link rel="stylesheet" th:href="@{/css/project.css}">
+</head>
+<body>
+<!-- 头部 -->
+<!-- <div th:replace="header"></div> -->
+<div class="home_header">
+        <div class="text_box">
+        	<a class="headline fl" href="/index">
+            <p>深海科考数据管理平台</p>
+            <p>Deep-sea Data System</p>
+        	</a>
+        	<div class="logo fl">
+            <a class="logo_href" href="/index"><img alt="" th:src="@{/images/sy-logo.png}"></a>	
+        	</div>
+        </div>
+        <ul sec:authorize="isAuthenticated()" class="userLogon">
+        	<li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-yonghu" style="color: #1890ff"></i>
+        			<p class="infoTxt" sec:authentication="name"></p>
+        		</a>
+        	</li>
+        	<li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-xiaoxi" style="color: #FF5722"></i>
+        			<p class="infoTxt">
+        				<span>消息</span>
+        				<span class="comNum infoNum" style="background:#FF5722">2</span>
+        			</p>
+        		</a>
+        	</li>
+        	<li class="infoLi">
+        		<a href="myTaskList" style="display: block;">
+        			<i class="iconfont icon-renwu" style="color: #009688"></i>
+        			<p class="infoTxt">
+	        			<span>任务</span>
+	        			<span class="comNum taskNum" style="background:#009688">3</span>
+        			</p>
+        		</a>
+        	</li>
+        	<li class="infoLi" style="width: 60px;">
+        		<a href="javascript:;">
+        			<form th:action="@{/logout}" method="post">
+        				<i class="iconfont icon-zhuxiao" style="color: #FF0303"></i>
+								<input class="infoTxt logout" type="submit" value="注销" />
+							</form>
+        		</a>
+        	</li>
+        </ul>
+    </div>
+
+    <!-- 导航栏 -->
+    <ul class="layui-nav" lay-filter="">
+        <li class="layui-nav-item"><a th:href="@{/index}">首页</a></li>
+        <li class="layui-nav-item layui-this">
+          <a href="javascript:;">数据上传</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a th:href="@{/templateParse}">模板解析</a></dd>
+            <dd><a th:href="@{/dataUpload}">上传数据(批量)</a></dd>
+            <dd class="layui-this"><a th:href="@{/dataUploadList}">上传数据(表单)</a></dd>
+            <!-- <dd><a th:href="@{/query/queryMainTableData?id=24&dataType=FluidFlow}">查看主表数据</a></dd> -->
+          </dl>
+        </li>
+        <!-- <li class="layui-nav-item"><a href="search">数据检索</a></li> -->
+        <li class="layui-nav-item"><a th:href="@{/replaceSearch}">数据检索</a></li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">统计分析</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a th:href="@{/shipStatistic}">科考航次</a></dd>
+            <dd><a th:href="@{/platStatistic}">科考船舶</a></dd>
+            <dd><a th:href="@{/submersibleStatistic}">潜器平台</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">科考作业</a>
+            <dl class="layui-nav-child">
+                <!-- 二级菜单 -->
+                <dd><a  th:href="@{/job/shipList}">航次管理</a></dd>
+                <dd><a th:href="@{/job/messageList}">消息管理</a></dd>
+                <dd><a th:href="@{/job/postList}">岗位管理</a></dd>
+                <dd class="jobMenu">
+                	<a href="#" class="job">站位作业<i class="iconfont icon-right"></i></a>
+                	<dl class="layui-nav-child jobList-child">
+                		<dd class="menuTree">
+                			<a th:href="@{/job/ctdList}">取水</a>
+                			<!-- <dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">CTD</a></dd>
+		                		<dd><a href="javascript:;">泵</a></dd>
+		                	</dl> -->
+                		</dd>
+                		<dd class="menuTree">
+                			<a th:href="@{/job/precipitateList}">取沉积物</a>
+                			<!-- <dl class="layui-nav-child listTree">
+		                		<dd><a th:href="@{/job/precipitateList?type=columnar}">柱状</a></dd>
+		                		<dd><a th:href="@{/job/precipitateList?type=trunk}">箱式</a></dd>
+		                		<dd><a th:href="@{/job/precipitateList?type=multitube}">多管</a></dd>
+		                	</dl> -->
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">取岩石<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">钻机</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">精细取样<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">KOV</a></dd>
+		                		<dd><a href="javascript:;">USBL/SBL/LBL</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">探测类<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">热流</a></dd>
+		                	</dl>
+                		</dd>
+                	</dl>
+                </dd>
+                <dd class="jobMenu">
+                	<a href="#" class="job">走航作业<i class="iconfont icon-right"></i></a>
+                	<dl class="layui-nav-child jobList-child">
+                		<dd class="menuTree">
+                			<a href="javascript:;">地球物理<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">MB</a></dd>
+		                		<dd><a th:href="@{/job/subbottomList}">SB</a></dd>
+		                		<dd><a href="javascript:;">GR</a></dd>
+		                		<dd><a href="javascript:;">MAG</a></dd>
+		                		<dd><a href="javascript:;">SS</a></dd>
+		                		<dd><a th:href="@{/job/seismicList}">SEIS</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">物理海洋<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">SBE21</a></dd>
+		                		<dd><a href="javascript:;">ADCP</a></dd>
+		                		<dd><a href="javascript:;">海气通量</a></dd>
+		                		<dd><a href="javascript:;">气象站</a></dd>
+		                	</dl>
+                		</dd>
+                	</dl>
+                </dd>
+                <dd><a th:href="@{/job/myTaskList}">我的任务</a></dd>
+                <dd><a th:href="@{/job/deviceList}">设备管理</a></dd>
+                <dd><a th:href="@{/job/meetingList}">会议管理</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">字典管理</a>
+            <dl class="layui-nav-child">
+               <!-- 二级菜单 -->
+               <dd><a th:href="@{/dataTypeList}">数据类型</a></dd>
+               <dd><a th:href="@{/deviceTypeList}">设备类型</a></dd>
+               <dd><a th:href="@{/platTypeList}">平台类型</a></dd>
+               <dd><a th:href="@{/shipPlatList}">科考船舶</a></dd>
+               <dd><a th:href="@{/submersiblePlatList}">潜器平台</a></dd>
+               <dd><a th:href="@{/suberMessageList}">潜器潜次</a></dd>
+            </dl>
+        </li>
+    </ul>
+
+
+<div style="width: 1200px;margin:20px auto;text-align: right">
+	<button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" id="source_btn">添加数据源</button><a class="layui-btn layui-btn-normal"  th:href="@{/job/shipList}" target="_blank">航次管理</a><a class="layui-btn layui-btn-normal" th:href="@{relatePublicationList}" target="_blank">文献管理</a>
+</div>
+<div class="layui-form common_table">
+  <table class="layui-table">
+    <thead>
+      <tr style="text-align: center;">
+        <th>序号</th>
+		<th>航次名称</th>
+		<th>作业类型</th>
+		<th>数据类型</th>
+		<th>设备类型</th>
+		<!-- <th>平台类型</th>
+		<th>平台名称</th>
+		<th>科考船舶</th> -->
+		<th>数据格式</th>
+		<th>开始时间</th>
+		<th>结束时间</th>
+		<th style="text-align: center;">操作</th>
+      </tr> 
+    </thead>
+    <tbody>
+      	<tr th:each="source:${pageInfo.list}">
+			<td th:text="${sourceStat.index+1}"></td>
+			<td th:text="${source.expeditions}"></td>
+			<td th:text="${source.jobType}"></td>
+			<td th:text="${source.dataType}"></td>
+			<td th:text="${source.deviceType}"></td>
+			<!-- <td th:text="${source.platformType}"></td>
+			<td th:text="${source.submersiblePlat}"></td>
+			<td th:text="${source.shipOrPlatformName}"></td> -->
+			<td th:text="${source.fileFormat}"></td>
+			<td th:text="${#strings.substringBefore(source.startTime,'.')}"></td>
+			<td th:text="${#strings.substringBefore(source.endTime,'.')}"></td>
+			<td style="text-align:center">
+				<a class="layui-btn layui-btn-xs" th:href="@{singleDataUpload(id=${source.id})}" target="_blank">数据上传</a>
+				<a class="layui-btn layui-btn-xs"  th:onclick="'javascript:viewSource(\''+${source.id}+'\');'">详情</a>
+			</td>
+		</tr>
+    </tbody>
+  </table>
+	<div th:replace="page :: pager"></div>
+</div>
+
+<form class="layui-form common_popup" action="" id="dataSourceForm" method="post">
+	<div class="layui-form-item">
+	    <div class="layui-inline">
+	      <label class="layui-form-label">航次名称: </label>
+	      <div class="layui-input-inline">
+	        <select name="shipId" lay-search="" lay-verify="required">
+	          <option value="">请选择航次</option>
+	          <option th:each="ship:${shipList}" th:value="${ship.id}" th:text="${ship.expedition}"></option>
+	        </select>
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">作业类型: </label>
+	      <div class="layui-input-inline">
+	        <select name="jobType" lay-search="" lay-verify="required">
+	        	<option value="">请选择</option>
+	        	<option value="站位作业">站位作业</option>
+	        	<option value="测线作业">测线作业</option>
+	        </select>
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+		    <label class="layui-form-label">是否为潜器作业:  </label>
+		    <div class="layui-input-inline" id="isChecked">
+		      <input type="radio" name="choose" value="0" title="是" lay-filter="test" checked>
+		      <input type="radio" name="choose" value="1" title="否" lay-filter="test">
+		    </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">潜器名称: </label>
+	      <div class="layui-input-inline">
+	        <input id="submerName" type="text" name="submerName" autocomplete="off" lay-verify="required" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">数据类型: </label>
+	      <div class="layui-input-inline">
+	       	<select name="dataType" lay-search="" lay-verify="required">
+	          <option value="">请选择数据类型</option>
+	          <option th:each="data:${dataList}" th:value="${data.typeName}" th:text="${data.typeName}"></option>
+	        </select>
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">设备类型: </label>
+	      <div class="layui-input-inline">
+	        <select name="deviceType" lay-search="" lay-verify="required">
+	          <option value="">请选择设备类型</option>
+	          <option th:each="dev:${deviceList}" th:value="${dev.typeName}" th:text="${dev.typeName}"></option>
+	        </select>
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">设备序列号: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="deviceSeriNo" id="deviceSeriNo" lay-verify="required" autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">平台类型: </label>
+	      <div class="layui-input-inline">
+	        <select name="platformType" lay-search="" lay-verify="required">
+	          <option value="">请选择平台类型</option>
+	          <option th:each="plat:${platList}" th:value="${plat.typeName}" th:text="${plat.typeName}"></option>
+	        </select>
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">平台名称: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="submersiblePlat" id="submersiblePlat" lay-verify="required" autocomplete="off"  class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">科考船舶: </label>
+	      <div class="layui-input-inline">
+	        <select name="shipOrPlatformName" lay-search="" lay-verify="required">
+	          <option value="">请选择船舶</option>
+	          <option th:each="shipPlat:${shipPlatList}" th:value="${shipPlat.shipName}" th:text="${shipPlat.shipName}"></option>
+	        </select>
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">数据格式: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="fileFormat" id="fileFormat" lay-verify="required" autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">处理状态: </label>
+	      <div class="layui-input-inline">
+	      	<select name="rawProcessedStatus" lay-search="" lay-verify="required">
+	        	<option value="">请选择</option>
+	        	<option value="raw">raw</option>
+	        	<option value="Processed">Processed</option>
+	        </select>
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">开始时间: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="startTime" id="startTime" lay-verify="required" autocomplete="off" class="layui-input" placeholder="yyyy-MM-dd HH:mm:ss">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">结束时间: </label>
+	      <div class="layui-input-inline">
+	        <input type="text"  name="endTime" id="endTime" autocomplete="off" lay-verify="required" class="layui-input" placeholder="yyyy-MM-dd HH:mm:ss">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">资助项目: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="fundingAgency" autocomplete="off" lay-verify="required" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">论文引用: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="referenceCitation" autocomplete="off" lay-verify="required" class="layui-input">
+	      </div>
+	    </div>
+  	</div>
+  	<div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	      <button class="layui-btn" lay-submit="" lay-filter="sourceForm">提交</button>
+	    </div>
+  </div>
+</form>
+
+<!-- 底部 -->
+<div class="footer cl">
+  <p>版权所有©2018～ <span id="timeYear"></span> 中国科学院深海科学与工程研究所</p>
+  <p>技术支持:船海科技有限公司</p>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript">
+	layui.use(["element",'form','laydate'],function(){
+		var element = layui.element;
+		var $ = layui.jquery;
+		var layer=layui.layer;
+		var form=layui.form;
+		var laydate=layui.laydate;
+		
+		laydate.render({
+		    elem: '#startTime',
+		    type: 'datetime',
+		    format:'yyyy-MM-dd'
+		});
+		
+		laydate.render({
+		    elem: '#endTime',
+		    type: 'datetime',
+		    format:'yyyy-MM-dd'
+		});
+		
+		var mydate = new Date(); 
+		var tm=mydate.getFullYear(); 
+		$("#timeYear").text(tm);
+		
+		/* 是否为潜器作业 */
+		$("#isChecked").click(function () {
+			var val = $('#isChecked input[name="choose"]:checked').val()
+			if(val == 1){	
+				$("#submerName").attr("readonly","readonly")
+			}else{
+				$("#submerName").removeAttr("readonly","readonly")
+			}
+		})
+		
+		//查看数据源信息
+		window.viewSource=function(id){
+			var url='sourceView?id='+id
+			layer.open({
+				id: "sourceView",
+				title : "查看数据源信息",
+				maxmin: true,
+				content : [url,'no'],//不让iframe出现滚动条
+				area: ['760px', '480px'],
+				btn: "关闭",
+				btnAlign: 'c',
+				anim:5,
+				type:2,//2表示iframe层
+				shadeClose: true,
+			});
+		}
+		
+		$("#source_btn").click(function() {
+			$("#dataSourceForm .layui-input-inline").val();
+			layer.open({
+				id: "addSource",
+				title : "添加数据源",
+				content : $('#dataSourceForm'),
+				area: '760px',
+				btnAlign: 'l',
+				type:1,
+				shadeClose :true,
+				success: function () {
+					$('#dataSourceForm')[0].reset();
+				}
+			});
+		});
+		 form.on('submit(sourceForm)', function(data){
+			 $.ajax({
+					url:'insertDataSource',
+					method:'post',
+					 data:data.field,
+					 dataType:'JSON',
+					 success:function(res){
+						 if(res.code==0){
+							 window.location.reload();
+						 }else{
+							 layer.msg('数据源添加失败！',{icon: 5,anim: 6,time: 1800});
+						 }
+						 layer.closeAll('page');
+					 }
+			});
+			 return false; //这里很重要，一定要加这个。要不然提交后弹出层会刷新一次，从而不执行ajax的success
+		});	
+	});
+</script>
+</body>
+</html>

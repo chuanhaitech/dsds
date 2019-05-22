@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <title>详细信息</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+	<link rel="stylesheet" th:href="@{/css/iconfont.css}">
+	<link rel="stylesheet" th:href="@{/css/project.css}">
+</head>
+<body>
+	<!-- 头部 -->
+	<!-- <div th:replace="header"></div> -->
+	<div class="home_header">
+        <div class="text_box">
+        	<a class="headline fl" href="/index">
+            <p>深海科考数据管理平台</p>
+            <p>Deep-sea Data System</p>
+        	</a>
+        	<div class="logo fl">
+            <a class="logo_href" href="/index"><img alt="" th:src="@{/images/sy-logo.png}"></a>	
+        	</div>
+        </div>
+        <ul sec:authorize="isAuthenticated()" class="userLogon">
+        	<li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-yonghu" style="color: #1890ff"></i>
+        			<p class="infoTxt" sec:authentication="name"></p>
+        		</a>
+        	</li>
+        	<!-- <li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-xiaoxi" style="color: #FF5722"></i>
+        			<p class="infoTxt">
+        				<span>消息</span>
+        				<span class="comNum infoNum" style="background:#FF5722">2</span>
+        			</p>
+        		</a>
+        	</li>
+        	<li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-renwu" style="color: #009688"></i>
+        			<p class="infoTxt">
+	        			<span>任务</span>
+	        			<span class="comNum taskNum" style="background:#009688">3</span>
+        			</p>
+        		</a>
+        	</li> -->
+        	<li class="infoLi" style="width: 60px;">
+        		<a href="javascript:;">
+        			<form th:action="@{/logout}" method="post">
+        				<i class="iconfont icon-zhuxiao" style="color: #FF0303"></i>
+								<input class="infoTxt logout" type="submit" value="注销" />
+							</form>
+        		</a>
+        	</li>
+        </ul>
+    </div>
+
+    <!-- 导航栏 -->
+    <ul class="layui-nav" lay-filter="">
+        <li class="layui-nav-item"><a th:href="@{/index}">首页</a></li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">数据上传</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a th:href="@{/templateParse}">模板解析</a></dd>
+            <dd><a th:href="@{/dataUpload}">上传数据(批量)</a></dd>
+            <dd><a th:href="@{/dataUploadList}">上传数据(表单)</a></dd>
+            <!-- <dd><a th:href="@{/query/queryMainTableData?id=24&dataType=FluidFlow}">查看主表数据</a></dd> -->
+          </dl>
+        </li>
+        <!-- <li class="layui-nav-item"><a href="search">数据检索</a></li> -->
+        <li class="layui-nav-item layui-this"><a th:href="@{/replaceSearch}">数据检索</a></li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">统计分析</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a th:href="@{/shipStatistic}">科考航次</a></dd>
+            <dd><a th:href="@{/platStatistic}">科考船舶</a></dd>
+            <dd><a th:href="@{/submersibleStatistic}">潜器平台</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">科考作业</a>
+            <dl class="layui-nav-child">
+                <!-- 二级菜单 -->
+                <dd><a  th:href="@{/job/shipList}">航次管理</a></dd>
+                <dd><a th:href="@{/job/messageList}">消息管理</a></dd>
+                <dd><a th:href="@{/job/postList}">岗位管理</a></dd>
+                <dd class="jobMenu">
+                	<a href="#" class="job">站位作业<i class="iconfont icon-right"></i></a>
+                	<dl class="layui-nav-child jobList-child">
+                		<dd class="menuTree">
+                			<a th:href="@{/job/ctdList}">取水</a>
+                			<!-- <dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">CTD</a></dd>
+		                		<dd><a href="javascript:;">泵</a></dd>
+		                	</dl> -->
+                		</dd>
+                		<dd class="menuTree">
+                			<a th:href="@{/job/precipitateList}">取沉积物</a>
+                			<!-- <dl class="layui-nav-child listTree">
+		                		<dd><a th:href="@{/job/precipitateList?type=columnar}">柱状</a></dd>
+		                		<dd><a th:href="@{/job/precipitateList?type=trunk}">箱式</a></dd>
+		                		<dd><a th:href="@{/job/precipitateList?type=multitube}">多管</a></dd>
+		                	</dl> -->
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">取岩石<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">钻机</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">精细取样<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">KOV</a></dd>
+		                		<dd><a href="javascript:;">USBL/SBL/LBL</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">探测类<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">热流</a></dd>
+		                	</dl>
+                		</dd>
+                	</dl>
+                </dd>
+                <dd class="jobMenu">
+                	<a href="#" class="job">走航作业<i class="iconfont icon-right"></i></a>
+                	<dl class="layui-nav-child jobList-child">
+                		<dd class="menuTree">
+                			<a href="javascript:;">地球物理<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">MB</a></dd>
+		                		<dd><a th:href="@{/job/subbottomList}">SB</a></dd>
+		                		<dd><a href="javascript:;">GR</a></dd>
+		                		<dd><a href="javascript:;">MAG</a></dd>
+		                		<dd><a href="javascript:;">SS</a></dd>
+		                		<dd><a th:href="@{/job/seismicList}">SEIS</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">物理海洋<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">SBE21</a></dd>
+		                		<dd><a href="javascript:;">ADCP</a></dd>
+		                		<dd><a href="javascript:;">海气通量</a></dd>
+		                		<dd><a href="javascript:;">气象站</a></dd>
+		                	</dl>
+                		</dd>
+                	</dl>
+                </dd>
+                <dd><a th:href="@{/job/myTaskList}">我的任务</a></dd>
+                <dd><a th:href="@{/job/deviceList}">设备管理</a></dd>
+                <dd><a th:href="@{/job/meetingList}">会议管理</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">字典管理</a>
+            <dl class="layui-nav-child">
+               <!-- 二级菜单 -->
+               <dd><a th:href="@{/dataTypeList}">数据类型</a></dd>
+               <dd><a th:href="@{/deviceTypeList}">设备类型</a></dd>
+               <dd><a th:href="@{/platTypeList}">平台类型</a></dd>
+               <dd><a th:href="@{/shipPlatList}">科考船舶</a></dd>
+               <dd><a th:href="@{/submersiblePlatList}">潜器平台</a></dd>
+               <dd><a th:href="@{/suberMessageList}">潜器潜次</a></dd>
+            </dl>
+        </li>
+    </ul>
+
+	<!-- 主题部分 -->
+	<div class="detail_main">
+		<ul class="from_header cl">
+			<li><span class="head_txt">航次 :</span><span id="expedtion">[[${dataSource.expeditions}]]</span></li>
+			<!-- <li><span class="head_txt">数据类型 :</span><span>[[${dataSource.dataType}]]</span></li>
+			<li><span class="head_txt">数据格式 :</span><span>[[${dataSource.fileFormat}]]</span></li> -->
+			<li><span class="head_txt">船/平台名 :</span><span>[[${dataSource.shipOrPlatformName}]]</span></li>
+			<!-- <li><span class="head_txt">设备类型 :</span><span>[[${dataSource.deviceType}]]</span></li> -->
+			<!-- <li><span class="head_txt long" title="原始数据/后处理数据">原始数据/后处理数据 :</span><span style="vertical-align: top">[[${dataSource.rawProcessedStatus}]]</span></li> -->
+			<li><span class="head_txt">平台类型 :</span><span>[[${dataSource.platformType}]]</span></li>
+			<!-- <li><span class="head_txt">数据用途 :</span><span>[[${dataSource.initiativeDataPortal}]]</span></li> -->
+		</ul>
+		
+		<!-- 表格展示 -->
+		<div class="detail_list cl">
+			<ul class="menu fl">
+				<li class="on" id="dataCollect"><hr/>采集数据<hr/></li>
+				<li id="collectInfo">采集信息<hr/></li>
+				<li id="navigation">参航人员<hr/></li>
+				<li id="apparatus">仪器设备<hr/></li>
+				<li id="voyageReport">航次报告<hr/></li>
+				<li id="correlationInfo">相关信息<hr/></li>
+			</ul>
+			<!-- 采集数据 -->
+			<div class="tabcontent fl">
+				<div class="container dataCollect">
+					<!-- <div class="sensor_title">
+						<h3 class="sensor fl">传感器数据</h3>
+						<form class="layui-form fl" action="" id="detail_sort">
+							<div class="layui-inline fr">
+								<label class="layui-form-label form_label">排序方式: </label>
+								<div class="layui-input-inline">
+									<select name="modules" lay-verify="required" lay-search="">
+										<option value="1">数据类型</option>
+										<option value="2">设备类型</option>
+										<option value="3">初级调查员</option>
+										<option value="4">平台</option>
+									</select>
+								</div>
+							</div>
+						</form>
+						<hr>
+					</div> -->
+					
+					<!-- <ul class="infromation">
+						<li class="info_li cl">
+							<div class="info_left fl">
+								<p class="info_title">
+									<a class="jump" href=" ">背向散射：声学，测深：斯瓦特，Sidescan</ a>
+								</p >
+								<div class="diptych fl">
+									<p>
+										<b class="legend">设备信息 </b><span>NOAA：NCEI</span>
+									</p >
+									<div class="device fl">设备信息</div>
+									<div class="device_cont fl">
+										<p>声纳: 多波束</p >
+										<p>Marcus G. Langseth</p >
+									</div>
+								</div>
+								<div class="diptych fl">
+									<p>
+										<b class="legend">知识库 </b><span>NOAA：NCEI</span>
+									</p >
+									<p>
+										<b class="legend">格式 </b><span>MBSystem</span>
+									</p >
+								</div>
+							</div>
+							<div class="info_right fr">
+								<p>
+									<b class="name">麦金托什，柯克 </b><span class="short">UTIG</span>
+								</p >
+							</div>
+							<hr>
+						</li>
+					</ul> -->
+				</div>
+			</div>
+			
+				<!-- 参航人员展示 -->
+				<!-- <div class="tabcontent fl"> -->
+					<!-- <div class="personnel_box" id="science">
+						<hr><h3 class="setstitle">科学人员</h3><hr>
+						<ul class="personnel">
+							<li>McIntosh, Kirk</li>
+						</ul>
+					</div>
+					<div class="personnel_box" id="support">
+						<hr><h3 class="setstitle">支持人员</h3><hr>
+						<ul class="personnel">
+							<li>Antochiw, Diana</li>
+						</ul>
+					</div> -->
+				<!-- </div> -->
+				
+				<!-- 航次报告 -->
+				<!-- <div class="tabcontent fl"> -->
+					<!-- <div class="personnel_box" id="reportBox">
+						<hr><h3 class="setstitle">航次报告</h3><hr>
+						<ul class="personnel" id="reportList">
+							<li>
+								<a href="javascript:;">McIntosh, Kirk</a>
+								<i class="iconfont icon-PDF"></i>
+								<hr>
+							</li>
+						</ul>
+					</div> -->
+				<!-- </div> -->
+		</div>
+	</div>
+	
+	<!-- 底部 -->
+	<div class="footer cl">
+		<p>
+			版权所有©2018～ <span id="timeYear"></span> 中国科学院深海科学与工程研究所
+		</p>
+		<p>技术支持:船海科技有限公司</p>
+	</div>
+</body>
+<script th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript">
+layui.use(['element','form'], function(){
+	var element = layui.element;
+	var $ = layui.jquery;
+	var form = layui.form;
+	
+	var mydate = new Date(); 
+	var tm=mydate.getFullYear(); 	
+	$("#timeYear").text(tm);
+	
+	var expedtion = $("#expedtion").text();
+	var initUrl = "query/queryDetailByExpedition?expedtion="+expedtion;
+	$('.dataCollect').show();
+	collectAjax(initUrl);
+	
+	/* 表格展示事件 */
+	$(".menu li").click(function() {
+		$(this).addClass("on").siblings().removeClass("on");
+		var index = $(this).index();
+		$(".container").eq(index).show().siblings().hide();
+		if(index == 0){
+			$(".container").eq(0).show().siblings().hide();
+			collectAjax(initUrl);
+		}else if(index == 1){
+			$(".container").eq(1).show().siblings().hide();
+			infoAjax("query/queryPositionByExpedition?expedition=" + expedtion);
+		}else if(index == 2){
+			$(".container").eq(2).show().siblings().hide();
+			navigationAjax("query/queryPersonalByExpedition?expedition=" + expedtion)
+		}else if(index == 3){
+			$(".container").eq(3).show().siblings().hide();
+			apparatusAjax("query/queryInstrumentByExpedtion?expedition=" + expedtion)
+		}else if(index == 4){
+			$(".container").eq(4).show().siblings().hide();
+			reportAjax("query/queryDocumentByExpedtion?expedition=" + expedtion)
+		}else{
+			$(".container").html("此数据正在优化,请另外选择!");
+		}
+	})
+	
+	/* 采集数据请求 */
+	function collectAjax(url) {
+		$.ajax({
+			url : url,
+			dataType: "json",
+			success:function(data){
+				var title = `
+									<div class="sensor_title">
+										<h3 class="sensor fl">传感器数据</h3>
+										<hr>
+									</div> `;
+				var infoHtml = "";
+				infoHtml += '<ul class="infromation">'
+				for(var i=0;i<data.length;i++){
+			    var item = data[i];
+			    infoHtml += '<li class="info_li cl"><div class="info_left fl"><p class="info_title"><a class="jump" href="dataSetInfo?id='+item.id+'">'
+			    + item.dataType+'</a></p><div class="diptych fl"><div class="device fl"><p><b class="legend">设备信息 </b><span>'
+			    +item.deviceType+'</span></p></div></div><div class="diptych fl"><p><b class="legend">格式 </b><span>'+item.fileFormat+
+			    '</span></p></div></div><div class="info_right fr"><p><b class="name">'+item.investigator+' </b></p></div><hr></li>'
+				}
+				infoHtml += '</ul>'
+				$(".container").html(title + infoHtml);
+				/* form.render(); */
+			}
+		})
+	}
+	
+	/* 采集信息数据请求 */
+	function infoAjax(url) {
+		$.ajax({
+			url : url,
+			dataType : "json",
+			success : function(data) {
+				var titleHtml = `
+										<div class="personnel_box" id="science"><hr>
+											<h3 class="setstitle">潜器潜次</h3><hr>
+											<ul class="personnel">
+												<li>此数据正在优化!</li>
+											</ul>
+										</div>
+										<div class="personnel_box" id="support"><hr>
+											<h3 class="setstitle">采集站位</h3><hr>
+										</div> `;
+				var infoHtml = "";
+				infoHtml += '<ul class="stanceInfo">';
+				for(var i=0;i<data.length;i++){
+					var item = data[i];
+					infoHtml += `
+									    <li class="infoLi">
+									      <p class="infoBox">
+									        <b class="legend">站位名称: </b><span>${item.statName}</span>
+									      </p>
+									      <p class="infoBox">
+									        <b class="legend">站位号: </b><span>${item.statNo}</span>
+									      </p>
+									      <p class="infoBox">
+									        <b class="legend">经度: </b><span>${item.longitude}</span>
+									      </p>
+									      <p class="infoBox last">
+									        <b class="legend">纬度: </b><span>${item.latitude}</span>
+									      </p>
+									      <hr>
+									    </li> `;
+				}
+				infoHtml += '</ul>'
+				$(".container").html(titleHtml + infoHtml);
+			}
+		})
+	}
+	
+	/* 参航人员数据请求 */
+	function navigationAjax(url) {
+		$.ajax({
+			url: url,
+			dataType: 'json',
+			success: function(data) {
+				var crewList = data.crew;
+				var scienceHtml = '<div class="personnel_box" id="science"><hr><h3 class="setstitle">科学人员</h3><hr><ul class="personnel"><li>'
+  +data.investigator+'</li></ul></div><div class="personnel_box" id="support"><hr><h3 class="setstitle">支持人员</h3><hr></div>'
+  			var supportHtml = "";
+  			supportHtml += '<ul class="personnel">';
+  			for(var i=0;i<crewList.length;i++){
+					var item = crewList[i];
+					supportHtml += '<li>'+item+'</li>'
+				}
+  			supportHtml += '</ul>';
+				$(".container").html(scienceHtml + supportHtml);
+			}
+		})
+	}
+	
+	/* 仪器设备数据请求 */
+	function apparatusAjax(url) {
+		$.ajax({
+			url : url,
+			dataType : "json",
+			success: function(data) {
+				var titleHtml = '<div class="personnel_box" id="reportBox"><hr><h3 class="setstitle">仪器设备</h3><hr></div>';
+				var infoHtml = ""
+				infoHtml += '<ul class="apparatus">';
+				for(var i = 0; i < data.length; i ++){
+					var item = data[i];
+					infoHtml += `
+											<li class="apparatusLi">
+												<p class="apparatusTitle">${item.deviceType}</p>
+												<div class="apparatusInfo">
+													<p class="apparatusP">
+														<b class="legend">设备信息: </b><span>暂未提供</span>
+													</p>
+													<p class="apparatusP last">
+														<b class="legend">平台信息: </b><span>${item.shipOrPlatformName}</span>
+													</p>
+												</div>
+												<hr>
+											</li> `;
+				}
+				infoHtml += '</ul>';
+				$(".container").html(titleHtml + infoHtml);
+			}
+		})
+	}
+	
+	/* 航次报告数据请求 */
+	function reportAjax(url) {
+		$.ajax({
+			url: url,
+			dataType: "json",
+			success:function(data){
+				var reportTitle = '<div class="personnel_box" id="reportBox"><hr><h3 class="setstitle">航次报告</h3><hr></div>';
+				var reportHtml = "";
+				reportHtml += '<ul class="personnel" id="reportList">';
+				for(var i=0;i<data.length;i++){
+					var item = data[i];
+					var docName = item.docName;
+					var fileName=docName.substring(0,docName.lastIndexOf('.'));
+					var format = docName.substring(docName.lastIndexOf('.') + 1);
+					var iconfont = "";
+					if(format == "pdf"){
+						iconfont = 'icon-PDF';
+					}else if(format == "docx" ||format == "doc"){
+						iconfont = 'icon-Word';
+					}
+					reportHtml += '<li><a href="down/downloadFile?fileId='+ item.docId +'" title="下载文件">'+fileName+
+							'</a><i class="iconfont '+ iconfont +'"></i><hr></li>'			
+				}
+				reportHtml += '</ul>';
+				$(".container").html(reportTitle + reportHtml);
+			}
+		})
+	}
+})
+</script>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>分页</title>
+</head>
+<body>
+<div class="page_style" th:fragment="pager">
+	<div class="current">
+		当前第<span class="num"> [[${pageInfo.pageNum}]] </span>页 共<span class="num"> [[${pageInfo.pages}]] </span>页,总共<span class="num"> [[${pageInfo.total}]] </span>条记录    		
+	</div>
+	<div class="page_box">
+		<a class="start_page" th:href="@{${pageUrl}(pageIndex=1,pageSize=${pageInfo.pageSize})}">首页</a>
+		<a class="turn" th:if="${not pageInfo.isFirstPage}" th:href="@{${pageUrl}(pageIndex=${pageInfo.pageNum-1},pageSize=${pageInfo.pageSize})}">上一页</a>
+		<a class="turn" th:if="${pageInfo.isFirstPage}" href="javascript:void(0);">上一页</a>
+		<a class="turn" th:if="${not pageInfo.isLastPage}" th:href="@{${pageUrl}(pageIndex=${pageInfo.pageNum+1},pageSize=${pageInfo.pageSize})}">下一页</a>
+		<a class="turn" th:if="${pageInfo.isLastPage}" href="javascript:void(0);">下一页</a>
+		<a class="end_page" th:href="@{${pageUrl}(pageIndex=${pageInfo.pages},pageSize=${pageInfo.pageSize})}">尾页</a>	
+	</div>
+</div>
+</body>
+</html>

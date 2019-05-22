@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>主表数据</title>
+	<link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+	<link rel="stylesheet" th:href="@{/css/project.css}">
+</head>
+<body>
+<div style="text-align: center;font-weight:600;">表名:[[${tableName}]]</div>
+<div class="layui-form common_table">
+	<input type="hidden" id="sourceId" name="sourceId" th:value="${sourceId}">
+	<table class="layui-table" th:each="mainTableMap:${mainTableListMap}">
+	  <tr>
+	    <td  align="center" th:each="mainTable:${mainTableMap}">
+	    	<span th:if="${#strings.startsWith(mainTable.key,'table')}">
+	    		<!-- <a  th:onclick="'javascript:showData(\''+${mainTable.key}+'\');'" target="_blank">查看数据</a> -->
+	    		[[${#strings.substring(mainTable.key,6)}]]
+	    	</span>
+	    	<span th:if="${!#strings.startsWith(mainTable.key,'table')}">
+	    		[[${mainTable.key}]]
+	    	</span>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td  align="center" th:each="mainTable:${mainTableMap}">
+	    	<span th:if="${mainTable.key == 'dataFile'}">
+	    		<a th:href="@{/down/downloadFile(fileId=${#strings.substring(mainTable.value,0,24)})}">下载</a>
+	    	</span>
+	    	<span th:if="${mainTable.key != 'dataFile'}">
+	    		[[${mainTable.value}]]
+	    	</span>
+	    	<span th:if="${#strings.startsWith(mainTable.key,'table')}">
+	    		<a  th:onclick="'javascript:showData(\''+${mainTable.key}+'\');'" target="_blank">查看数据</a>
+	    	</span>
+	    </td>
+	  </tr>
+	</table>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+layui.use(['element','layer','form'],function(){
+	var element = layui.element;
+	var $ = layui.jquery;
+	var layer=layui.layer;
+	var form=layui.form;
+	
+	var mydate = new Date(); 
+	var tm=mydate.getFullYear(); 
+	$("#timeYear").text(tm);
+	
+	window.showData=function(tableName){
+		var sourceId=$("#sourceId").val();
+		console.log(sourceId);
+		var url="/query/queryCascadeTableData?id="+sourceId+"&tableName="+tableName;
+		//window.location.href="/query/queryData?id="+sourceId+"&tableName="+tableName
+		window.open(url,'_blank');
+	}
+});
+</script>
+</body>
+</html>

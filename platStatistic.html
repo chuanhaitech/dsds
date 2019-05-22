@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>船/平台统计</title>
+	<link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+		<link rel="stylesheet" th:href="@{/css/iconfont.css}">
+	<link rel="stylesheet" th:href="@{/css/project.css}">
+</head>
+<body>
+
+<!-- 头部 -->
+	<!-- <div th:replace="header"></div> -->
+	<div class="home_header">
+        <div class="text_box">
+        	<a class="headline fl" href="/index">
+            <p>深海科考数据管理平台</p>
+            <p>Deep-sea Data System</p>
+        	</a>
+        	<div class="logo fl">
+            <a class="logo_href" href="/index"><img alt="" th:src="@{/images/sy-logo.png}"></a>	
+        	</div>
+        </div>
+        <ul sec:authorize="isAuthenticated()" class="userLogon">
+        	<li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-yonghu" style="color: #1890ff"></i>
+        			<p class="infoTxt" sec:authentication="name"></p>
+        		</a>
+        	</li>
+        	<!-- <li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-xiaoxi" style="color: #FF5722"></i>
+        			<p class="infoTxt">
+        				<span>消息</span>
+        				<span class="comNum infoNum" style="background:#FF5722">2</span>
+        			</p>
+        		</a>
+        	</li>
+        	<li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-renwu" style="color: #009688"></i>
+        			<p class="infoTxt">
+	        			<span>任务</span>
+	        			<span class="comNum taskNum" style="background:#009688">3</span>
+        			</p>
+        		</a>
+        	</li> -->
+        	<li class="infoLi" style="width: 60px;">
+        		<a href="javascript:;">
+        			<form th:action="@{/logout}" method="post">
+        				<i class="iconfont icon-zhuxiao" style="color: #FF0303"></i>
+								<input class="infoTxt logout" type="submit" value="注销" />
+							</form>
+        		</a>
+        	</li>
+        </ul>
+    </div>
+
+    <!-- 导航栏 -->
+    <ul class="layui-nav" lay-filter="">
+        <li class="layui-nav-item"><a th:href="@{/index}">首页</a></li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">数据上传</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a th:href="@{/templateParse}">模板解析</a></dd>
+            <dd><a th:href="@{/dataUpload}">上传数据(批量)</a></dd>
+            <dd><a th:href="@{/dataUploadList}">上传数据(表单)</a></dd>
+            <!-- <dd><a th:href="@{/query/queryMainTableData?id=24&dataType=FluidFlow}">查看主表数据</a></dd> -->
+          </dl>
+        </li>
+        <!-- <li class="layui-nav-item"><a href="search">数据检索</a></li> -->
+        <li class="layui-nav-item"><a th:href="@{/replaceSearch}">数据检索</a></li>
+        <li class="layui-nav-item layui-this">
+          <a href="javascript:;">统计分析</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a th:href="@{/shipStatistic}">科考航次</a></dd>
+            <dd class="layui-this"><a th:href="@{/platStatistic}">科考船舶</a></dd>
+            <dd><a th:href="@{/submersibleStatistic}">潜器平台</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">科考作业</a>
+            <dl class="layui-nav-child">
+                <!-- 二级菜单 -->
+                <dd><a  th:href="@{/job/shipList}">航次管理</a></dd>
+                <dd><a th:href="@{/job/messageList}">消息管理</a></dd>
+                <dd><a th:href="@{/job/postList}">岗位管理</a></dd>
+                <dd class="jobMenu">
+                	<a href="#" class="job">站位作业<i class="iconfont icon-right"></i></a>
+                	<dl class="layui-nav-child jobList-child">
+                		<dd class="menuTree">
+                			<a th:href="@{/job/ctdList}">取水</a>
+                			<!-- <dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">CTD</a></dd>
+		                		<dd><a href="javascript:;">泵</a></dd>
+		                	</dl> -->
+                		</dd>
+                		<dd class="menuTree">
+                			<a th:href="@{/job/precipitateList}">取沉积物</a>
+                			<!-- <dl class="layui-nav-child listTree">
+		                		<dd><a th:href="@{/job/precipitateList?type=columnar}">柱状</a></dd>
+		                		<dd><a th:href="@{/job/precipitateList?type=trunk}">箱式</a></dd>
+		                		<dd><a th:href="@{/job/precipitateList?type=multitube}">多管</a></dd>
+		                	</dl> -->
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">取岩石<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">钻机</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">精细取样<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">KOV</a></dd>
+		                		<dd><a href="javascript:;">USBL/SBL/LBL</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">探测类<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">热流</a></dd>
+		                	</dl>
+                		</dd>
+                	</dl>
+                </dd>
+                <dd class="jobMenu">
+                	<a href="#" class="job">走航作业<i class="iconfont icon-right"></i></a>
+                	<dl class="layui-nav-child jobList-child">
+                		<dd class="menuTree">
+                			<a href="javascript:;">地球物理<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">MB</a></dd>
+		                		<dd><a th:href="@{/job/subbottomList}">SB</a></dd>
+		                		<dd><a href="javascript:;">GR</a></dd>
+		                		<dd><a href="javascript:;">MAG</a></dd>
+		                		<dd><a href="javascript:;">SS</a></dd>
+		                		<dd><a th:href="@{/job/seismicList}">SEIS</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">物理海洋<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">SBE21</a></dd>
+		                		<dd><a href="javascript:;">ADCP</a></dd>
+		                		<dd><a href="javascript:;">海气通量</a></dd>
+		                		<dd><a href="javascript:;">气象站</a></dd>
+		                	</dl>
+                		</dd>
+                	</dl>
+                </dd>
+                <dd><a th:href="@{/job/myTaskList}">我的任务</a></dd>
+                <dd><a th:href="@{/job/deviceList}">设备管理</a></dd>
+                <dd><a th:href="@{/job/meetingList}">会议管理</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">字典管理</a>
+            <dl class="layui-nav-child">
+               <!-- 二级菜单 -->
+               <dd><a th:href="@{/dataTypeList}">数据类型</a></dd>
+               <dd><a th:href="@{/deviceTypeList}">设备类型</a></dd>
+               <dd><a th:href="@{/platTypeList}">平台类型</a></dd>
+               <dd><a th:href="@{/shipPlatList}">科考船舶</a></dd>
+               <dd><a th:href="@{/submersiblePlatList}">潜器平台</a></dd>
+               <dd><a th:href="@{/suberMessageList}">潜器潜次</a></dd>
+            </dl>
+        </li>
+    </ul>
+	
+<!-- 主题部分 -->
+	<div class="statistic_main">
+		<form class="layui-form" action="" id="chooseVoyage">
+			<div class="layui-form-item">
+				<div class="layui-inline">
+		      <label class="layui-form-label">请选择船舶名称 : </label>
+		      <div class="layui-input-inline">
+		        <select name="platName" lay-verify="required" lay-search="" id="platName">
+		          <!-- <option value="">直接选择或搜索选择</option> -->
+		          <option th:each="plat:${platList}" th:value="${plat.shipName}" th:text="${plat.shipName}"></option>
+		        </select>
+		      </div>
+		    </div>
+	    </div>
+		</form>
+		<div class="echarShow">
+			<div class="dataTotal">
+				<b>船舶总作业次数 : <span id="jobTime">0</span>次</b>
+				<b style="margin-left: 80px">船舶总作业时长 : <span id="jobHours">0</span>小时</b>
+			</div>
+			<div id="echar" style="width: 1200px;height:580px;margin-top: 20px"></div>
+		</div>
+	</div>
+
+	<!-- 底部 -->
+	<div class="footer cl">
+     <p>版权所有©2018～ <span id="timeYear"></span> 中国科学院深海科学与工程研究所</p>
+     <p>技术支持:船海科技有限公司</p>
+   </div>
+</body>
+<script th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/js/echarts/echarts.min.js}"></script>
+<script>
+	//注意：导航 依赖 element 模块，否则无法进行功能性操作
+	layui.use(['element','laydate','layer','form'], function() {
+		var element = layui.element;
+		var laydate = layui.laydate;
+		var $ = layui.jquery;
+		var layer = layui.layer;
+		var form = layui.form;
+		
+		var mydate = new Date(); 
+		var tm=mydate.getFullYear(); 
+		$("#timeYear").text(tm);
+		
+		//执行一个laydate实例
+		 laydate.render({
+		    elem: '#test30', //指定元素
+		    isInitValue: true, //是否允许填充初始值，默认为 true
+		    theme: '#1E9FFF', 
+		  });
+		 laydate.render({
+		    elem: '#test31', //指定元素
+		    isInitValue: true, //是否允许填充初始值，默认为 true
+		    theme: '#1E9FFF',   
+		  });
+		 
+		 var platName = "";
+		 
+		 /* 初始化数据 */
+		 totalInfo('探索一号');
+		 
+		 /* $(".layui-anim-upbit dd").click(function () {
+			 platName = $(this).attr("lay-value"); 
+			 if(platName == ""){
+				 $("#jobTime").text(0);
+				 $("#jobHours").text(0);
+			 }else{
+				 totalInfo(platName);
+			 }
+			}) */
+			
+			/* 船舶信息统计 */
+			function totalInfo(platName) {
+				 var xAxisData = [];  // x轴数据展示
+				 var seriesData = [];  // 柱子上数据展示
+				 
+				 $.ajax({
+					 url: 'statisticPlatByPlatName?platName=' + platName,
+					 dataType: "json",
+					 success: function (data) {
+						 var timeList = data.timeList;
+							$("#jobTime").text(data.worksCount);
+							$("#jobHours").text(data.timesCount);
+							
+							for(var i=0;i<timeList.length;i++){
+								var item = timeList[i];
+								xAxisData.push(item.workDate);
+								seriesData.push(item.hourCount);
+							}
+							myEchar(xAxisData,seriesData,platName);
+						}
+				 })
+			}
+			
+			function myEchar(xAxisData,seriesData,platName) {
+				 var myChart = echarts.init(document.getElementById('echar'));
+				
+				//series样式
+				 var itemStyle = {
+				     normal: {
+				         color: new echarts.graphic.LinearGradient(
+				             0, 1, 0, 0, [{
+				                 offset: 0,
+				                 color: '#2af598'
+				             }, {
+				                 offset: 1,
+				                 color: '#009efd'
+				             }]
+				         ),
+				         barBorderRadius: 4
+				     },
+				     emphasis: {
+				         color: new echarts.graphic.LinearGradient(
+				             0, 1, 0, 0, [{
+				                 offset: 0,
+				                 color: '#2af598'
+				             }, {
+				                 offset: 1,
+				                 color: '#009efd'
+				             }]
+				         ),
+				         barBorderRadius: 4
+				     }
+				 };
+
+				 var option = {
+				     color: ['#3398DB'],
+				     title: {
+				    	 text: platName,
+				    	 textStyle: {
+				    		 fontSize: 14,
+				    	 }
+				     },
+				     tooltip : {
+				         trigger: 'axis',
+				         axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+				             type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
+				         }
+				     },
+				     toolbox: {
+				         show: true,
+				         feature : {
+				             mark : {show: true},
+				             dataView : {show: true, readOnly: false},
+				             magicType: {show: true, type: ['line', 'bar']},
+				             restore : {show: true},
+				             saveAsImage : {show: true}
+				         }
+				     },
+				     grid: {
+		             y: 80,
+		             y2: 80
+				     },
+				     legend: {
+				         show: true,
+				         x: 'center',
+				         data: ['作业时长']
+				     },
+				     xAxis : [
+				         {
+				             type : 'category',
+				             axisTick: {
+				                 alignWithLabel: true
+				             },
+				             data: xAxisData
+				         }
+				     ],
+				     yAxis: [
+				         {
+				             type: 'value',
+				             name: '作业时长(小时)'
+				         }
+				     ],
+				     series : [
+				         {
+				             name:'作业时长',
+				             type:'bar',
+				             barWidth: 30,
+				             itemStyle: itemStyle,
+				             label: {
+				                 normal: {
+				                     show: true,
+				                     position: 'top',
+				                     formatter: '{c}'
+				                 }
+				             },
+				            data : seriesData
+				         }
+				     ],
+				     dataZoom: [{
+				         type: 'slider',
+				         show: true,
+				         backgroundColor: '#888',
+				         dataBackground: {
+				             lineStyle: {
+				                 opacity: 0
+				             },
+				             areaStyle: {
+				                 opacity: 0
+				             }
+				         },
+				         textStyle: {
+				        	 color: 'red'
+				         },
+				         realtime: true,
+				         start: 0,
+				         filterMode: 'filter',
+				         end: 60,
+				         throttle: 0,
+				         //handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+				         handleStyle: {
+				             color: '#fff',
+				             shadowBlur: 3,
+				             shadowColor: 'rgba(0, 0, 0, 0.6)',
+				             shadowOffsetX: 2,
+				             shadowOffsetY: 2
+				         },
+				         xAxisIndex: 0
+				     }],
+				 };
+				 
+				 myChart.setOption(option);		
+			} 
+			
+		 form.on('select', function(data) {
+			 var title = $(this).text();
+			 totalInfo(title);
+		 });
+	});
+</script>
+</html>

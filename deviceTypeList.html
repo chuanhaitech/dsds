@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>设备类型列表</title>
+	<link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+		<link rel="stylesheet" th:href="@{/css/iconfont.css}">
+	<link rel="stylesheet" th:href="@{/css/project.css}">
+</head>
+<body>
+<!-- 头部 -->
+<!-- <div th:replace="header"></div> -->
+<div class="home_header">
+        <div class="text_box">
+        	<a class="headline fl" href="/index">
+            <p>深海科考数据管理平台</p>
+            <p>Deep-sea Data System</p>
+        	</a>
+        	<div class="logo fl">
+            <a class="logo_href" href="/index"><img alt="" th:src="@{/images/sy-logo.png}"></a>	
+        	</div>
+        </div>
+        <ul sec:authorize="isAuthenticated()" class="userLogon">
+        	<li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-yonghu" style="color: #1890ff"></i>
+        			<p class="infoTxt" sec:authentication="name"></p>
+        		</a>
+        	</li>
+        	<!-- <li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-xiaoxi" style="color: #FF5722"></i>
+        			<p class="infoTxt">
+        				<span>消息</span>
+        				<span class="comNum infoNum" style="background:#FF5722">2</span>
+        			</p>
+        		</a>
+        	</li>
+        	<li class="infoLi">
+        		<a href="javascript:;">
+        			<i class="iconfont icon-renwu" style="color: #009688"></i>
+        			<p class="infoTxt">
+	        			<span>任务</span>
+	        			<span class="comNum taskNum" style="background:#009688">3</span>
+        			</p>
+        		</a>
+        	</li> -->
+        	<li class="infoLi" style="width: 60px;">
+        		<a href="javascript:;">
+        			<form th:action="@{/logout}" method="post">
+        				<i class="iconfont icon-zhuxiao" style="color: #FF0303"></i>
+								<input class="infoTxt logout" type="submit" value="注销" />
+							</form>
+        		</a>
+        	</li>
+        </ul>
+    </div>
+
+    <!-- 导航栏 -->
+    <ul class="layui-nav" lay-filter="">
+        <li class="layui-nav-item"><a th:href="@{/index}">首页</a></li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">数据上传</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a th:href="@{/templateParse}">模板解析</a></dd>
+            <dd><a th:href="@{/dataUpload}">上传数据(批量)</a></dd>
+            <dd><a th:href="@{/dataUploadList}">上传数据(表单)</a></dd>
+            <!-- <dd><a th:href="@{/query/queryMainTableData?id=24&dataType=FluidFlow}">查看主表数据</a></dd> -->
+          </dl>
+        </li>
+        <!-- <li class="layui-nav-item"><a href="search">数据检索</a></li> -->
+        <li class="layui-nav-item"><a th:href="@{/replaceSearch}">数据检索</a></li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">统计分析</a>
+          <dl class="layui-nav-child">
+            <!-- 二级菜单 -->
+            <dd><a th:href="@{/shipStatistic}">科考航次</a></dd>
+            <dd><a th:href="@{/platStatistic}">科考船舶</a></dd>
+            <dd><a th:href="@{/submersibleStatistic}">潜器平台</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">科考作业</a>
+            <dl class="layui-nav-child">
+                <!-- 二级菜单 -->
+                <dd><a  th:href="@{/job/shipList}">航次管理</a></dd>
+                <dd><a th:href="@{/job/messageList}">消息管理</a></dd>
+                <dd><a th:href="@{/job/postList}">岗位管理</a></dd>
+                <dd class="jobMenu">
+                	<a href="#" class="job">站位作业<i class="iconfont icon-right"></i></a>
+                	<dl class="layui-nav-child jobList-child">
+                		<dd class="menuTree">
+                			<a th:href="@{/job/ctdList}">取水</a>
+                			<!-- <dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">CTD</a></dd>
+		                		<dd><a href="javascript:;">泵</a></dd>
+		                	</dl> -->
+                		</dd>
+                		<dd class="menuTree">
+                			<a th:href="@{/job/precipitateList}">取沉积物</a>
+                			<!-- <dl class="layui-nav-child listTree">
+		                		<dd><a th:href="@{/job/precipitateList?type=columnar}">柱状</a></dd>
+		                		<dd><a th:href="@{/job/precipitateList?type=trunk}">箱式</a></dd>
+		                		<dd><a th:href="@{/job/precipitateList?type=multitube}">多管</a></dd>
+		                	</dl> -->
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">取岩石<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">钻机</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">精细取样<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">KOV</a></dd>
+		                		<dd><a href="javascript:;">USBL/SBL/LBL</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">探测类<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">热流</a></dd>
+		                	</dl>
+                		</dd>
+                	</dl>
+                </dd>
+                <dd class="jobMenu">
+                	<a href="#" class="job">走航作业<i class="iconfont icon-right"></i></a>
+                	<dl class="layui-nav-child jobList-child">
+                		<dd class="menuTree">
+                			<a href="javascript:;">地球物理<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">MB</a></dd>
+		                		<dd><a th:href="@{/job/subbottomList}">SB</a></dd>
+		                		<dd><a href="javascript:;">GR</a></dd>
+		                		<dd><a href="javascript:;">MAG</a></dd>
+		                		<dd><a href="javascript:;">SS</a></dd>
+		                		<dd><a th:href="@{/job/seismicList}">SEIS</a></dd>
+		                	</dl>
+                		</dd>
+                		<dd class="menuTree">
+                			<a href="javascript:;">物理海洋<i class="iconfont icon-right"></i></a>
+                			<dl class="layui-nav-child listTree">
+		                		<dd><a href="javascript:;">SBE21</a></dd>
+		                		<dd><a href="javascript:;">ADCP</a></dd>
+		                		<dd><a href="javascript:;">海气通量</a></dd>
+		                		<dd><a href="javascript:;">气象站</a></dd>
+		                	</dl>
+                		</dd>
+                	</dl>
+                </dd>
+                <dd><a th:href="@{/job/myTaskList}">我的任务</a></dd>
+                <dd><a th:href="@{/job/deviceList}">设备管理</a></dd>
+                <dd><a th:href="@{/job/meetingList}">会议管理</a></dd>
+            </dl>
+        </li>
+        <li class="layui-nav-item layui-this">
+            <a href="javascript:;">字典管理</a>
+            <dl class="layui-nav-child">
+               <!-- 二级菜单 -->
+               <dd><a th:href="@{/dataTypeList}">数据类型</a></dd>
+               <dd class="layui-this"><a th:href="@{/deviceTypeList}">设备类型</a></dd>
+               <dd><a th:href="@{/platTypeList}">平台类型</a></dd>
+               <dd><a th:href="@{/shipPlatList}">科考船舶</a></dd>
+               <dd><a th:href="@{/submersiblePlatList}">潜器平台</a></dd>
+               <dd><a th:href="@{/suberMessageList}">潜器潜次</a></dd>
+            </dl>
+        </li>
+    </ul>
+
+<div style="width: 1200px;margin:20px auto;text-align: right">
+	<button data-method="offset" data-type="auto" class="layui-btn layui-btn-normal" id="device_btn">添加设备类型</button>
+</div>
+<div class="layui-form common_table">
+  <table class="layui-table">
+    <!-- <colgroup>
+      <col width="15%">
+      <col width="60%">
+      <col width="25%">
+    </colgroup> -->
+    <thead>
+      <tr>
+        <th>序号</th>
+		<th>设备类型名称</th>
+		<th>设备类型描述</th>
+		<th style="text-align: center;width: 160px">操作</th>
+      </tr> 
+    </thead>
+    <tbody>
+      	<tr th:each="device:${pageInfo.list}">
+			<td th:text="${deviceStat.index+1}"></td>
+			<td th:text="${device.typeName}"></td>
+			<td th:text="${device.deviceDesc}"></td>
+			<td style="text-align:center">
+				<a class="layui-btn layui-btn-xs" th:onclick="'javascript:deleteDeviceType(\''+${device.id}+'\');'">删除</a>
+			</td>
+		</tr>
+    </tbody>
+  </table>
+	<div th:replace="page :: pager"></div>
+</div>
+
+<form class="layui-form common_popup" action="" id="deviceTypeForm" method="post">
+	<div class="layui-form-item">
+	    <div class="layui-inline">
+	      <label class="layui-form-label">设备类型名称: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="typeName" id="typeName" lay-verify="required" autocomplete="off" class="layui-input">
+	      </div>
+	    </div>
+	    <div class="layui-inline">
+	      <label class="layui-form-label">设备类型描述: </label>
+	      <div class="layui-input-inline">
+	        <input type="text" name="deviceDesc" autocomplete="off" lay-verify="required" class="layui-input">
+	      </div>
+	    </div>
+  	</div>
+  	<div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	      <button class="layui-btn" lay-submit="" lay-filter="deviceForm">提交</button>
+	    </div>
+  </div>
+</form>
+
+<!-- 底部 -->
+<div class="footer cl">
+  <p>版权所有©2018～ <span id="timeYear"></span> 中国科学院深海科学与工程研究所</p>
+  <p>技术支持:船海科技有限公司</p>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script type="text/javascript">
+	layui.use(["element",'form'],function(){
+		var element = layui.element;
+		var $ = layui.jquery;
+		var layer=layui.layer;
+		var form=layui.form;
+		
+		var mydate = new Date(); 
+		var tm=mydate.getFullYear(); 
+		$("#timeYear").text(tm);
+		
+		$("#device_btn").click(function() {
+			layer.open({
+				title : "添加设备类型",
+				content : $('#deviceTypeForm'),
+				area: '420px',
+				btnAlign: 'l',
+				type:1,
+				shadeClose :true,
+			});
+			/* form.render();//动态渲染 */
+		});
+		 form.on('submit(deviceForm)', function(data){
+			 $.ajax({
+					url:'addDeviceType',
+					method:'post',
+					 data:data.field,
+					 dataType:'JSON',
+					 success:function(res){
+						 if(res.code==0){
+							 layer.msg(res.tipMsg,{icon:1,anim: 6,time: 1800});
+							 window.location.reload();
+						 }else{
+							 layer.msg('设备类型添加失败！',{icon: 5,anim: 6,time: 1800});
+						 }
+						 layer.closeAll('page');
+					 }
+			});
+			 return false; //这里很重要，一定要加这个。要不然提交后弹出层会刷新一次，从而不执行ajax的success
+		});	
+		//删除设备类型
+		window.deleteDeviceType=function(id){
+			layer.confirm("确定删除该设备类型？",{btn: ['确定', '取消'], title: "提示",shadeClose: true,},function(){
+				 $.ajax({
+					 url:'deleteDeviceType?id='+id,
+					 method:'post',
+					 success:function(res){
+						 if(res.code==0){
+							 window.location.reload();
+						 }else{
+							 layer.msg("设备类型删除失败!",{icon:5,anim: 6,time: 1800});
+						 }
+					 },
+				});
+			});
+		} 
+	});
+</script>
+</body>
+</html>
